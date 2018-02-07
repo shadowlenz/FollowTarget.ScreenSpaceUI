@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿//Free to use. Please mention my name "Eugene Chu" Twitter: @LenZ_Chu if you can ;3 https://twitter.com/LenZ_Chu
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,20 +8,20 @@ public class ScreenSpaceUI
 
     // Use this for initialization
     /// <summary>
-    /// 
+    /// UI follows target in scene around the canvas. Support aspect ratio, fixed ratio, and spherized clamp
     /// </summary>
     /// <param name="worldSpace_Tr : target"></param>
     /// <param name="offSetWorldSpace : offset pos"></param>
-    /// <param name="clampSpace : clamp edge of screen"></param>
+    /// <param name="clampSpace : gives extra space to clamp edge of screen"></param>
     /// <param name="wrapAroundScreen : if target goes behind cam, it'll still stay on the edge"></param>
-    /// <param name="aspectRatio : clamps to square"></param>
+    /// <param name="IgnoreaspectRatio : forces to clamps to ignore aspectRatio"></param>
     /// <param name="spherize : clamps into a sphere instead of boxed screen. Uses clampEdge.x only"></param>
     /// <returns></returns>
-    static public Vector3 ScreenSpace(Transform worldSpace_Tr, Vector2 offSetWorldSpace, Vector2 clampEdge, bool wrapAroundScreen = false, bool aspectRatio = false, bool spherize = false)
+    static public Vector3 ScreenSpace(Transform worldSpace_Tr, Vector2 offSetWorldSpace, Vector2 clampEdge, bool wrapAroundScreen = true, bool ignoreAspectRatio = false, bool spherize = false)
     {
         Vector3 screenPos = Camera.main.WorldToScreenPoint(worldSpace_Tr.position + (Camera.main.transform.right * offSetWorldSpace.x) + (worldSpace_Tr.up * offSetWorldSpace.y));
 
-        if (aspectRatio) clampEdge = new Vector2(clampEdge.x * Camera.main.aspect, clampEdge.y);
+        if (ignoreAspectRatio) clampEdge = new Vector2(clampEdge.x * Camera.main.aspect, clampEdge.y);
 
         //ON SCREEN
         // get the center of the screen and minus the percent of the offset for the left	//	get the center of the screen and minus the border percent for the right
