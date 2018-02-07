@@ -10,16 +10,19 @@ public class ScreenSpaceUI
     /// <summary>
     /// UI follows target in scene around the canvas. Support aspect ratio, fixed ratio, and spherized clamp
     /// </summary>
-    /// <param name="worldSpace_Tr : target"></param>
-    /// <param name="offSetWorldSpace : offset pos"></param>
-    /// <param name="clampSpace : gives extra space to clamp edge of screen"></param>
-    /// <param name="wrapAroundScreen : if target goes behind cam, it'll still stay on the edge"></param>
-    /// <param name="ignoreAspectRatio : forces to clamps to ignore aspectRatio"></param>
-    /// <param name="spherize : clamps into a sphere instead of boxed screen. Uses clampEdge.x only"></param>
+    /// <param name="worldSpace_Tr">target</param>
+    /// <param name="offSetWorldSpace">offset pos.</param>
+    /// <param name="clampEdge">gives extra space to clamp edge of screen. 0-1 percent.</param>
+    /// <param name="wrapAroundScreen">if target goes behind cam, it'll still stay on the edge.</param>
+    /// <param name="ignoreAspectRatio">forces to clamps to ignore aspectRatio.</param>
+    /// <param name="spherize">clamps into a sphere instead of boxed screen. 'Uses clampEdge.x' only.</param>
     /// <returns></returns>
     static public Vector3 ScreenSpace(Transform worldSpace_Tr, Vector2 offSetWorldSpace, Vector2 clampEdge, bool wrapAroundScreen = true, bool ignoreAspectRatio = false, bool spherize = false)
     {
         Vector3 screenPos = Camera.main.WorldToScreenPoint(worldSpace_Tr.position + (Camera.main.transform.right * offSetWorldSpace.x) + (worldSpace_Tr.up * offSetWorldSpace.y));
+
+        Vector2 _rawClamp = new Vector2((Screen.width * Mathf.Clamp01(clampEdge.x)), (Screen.height * Mathf.Clamp01(clampEdge.y))) / 2; //conver to percentage;
+        clampEdge = new Vector2((Screen.width * Mathf.Clamp01(1 - clampEdge.x)), (Screen.height * Mathf.Clamp01(1 - clampEdge.y))) / 2; //conver to percentage
 
         if (ignoreAspectRatio) clampEdge = new Vector2(clampEdge.x * Camera.main.aspect, clampEdge.y);
 
@@ -33,7 +36,7 @@ public class ScreenSpaceUI
             if (spherize) //clamps sphere. uses clampEdge.x
             {
                 Vector3 centerPt = new Vector3(Screen.width / 2, Screen.height / 2, 0);
-                screenPos = centerPt + Vector3.ClampMagnitude(new Vector3((screenPos - centerPt).x, (screenPos - centerPt).y, 1), clampEdge.x); //prevent z from being negative
+                screenPos = centerPt + Vector3.ClampMagnitude(new Vector3((screenPos - centerPt).x, (screenPos - centerPt).y, 1), (_rawClamp.x)); //prevent z from being negative
             }
             else // clamps at the edges
             {
@@ -47,6 +50,7 @@ public class ScreenSpaceUI
         {
             screenPos = screenPos * 1000;
         }
+        // Debug.Log(screenPos);
         return screenPos;
     }
 }
