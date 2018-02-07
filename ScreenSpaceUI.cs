@@ -14,7 +14,7 @@ public class ScreenSpaceUI
     /// <param name="offSetWorldSpace : offset pos"></param>
     /// <param name="clampSpace : gives extra space to clamp edge of screen"></param>
     /// <param name="wrapAroundScreen : if target goes behind cam, it'll still stay on the edge"></param>
-    /// <param name="IgnoreaspectRatio : forces to clamps to ignore aspectRatio"></param>
+    /// <param name="ignoreAspectRatio : forces to clamps to ignore aspectRatio"></param>
     /// <param name="spherize : clamps into a sphere instead of boxed screen. Uses clampEdge.x only"></param>
     /// <returns></returns>
     static public Vector3 ScreenSpace(Transform worldSpace_Tr, Vector2 offSetWorldSpace, Vector2 clampEdge, bool wrapAroundScreen = true, bool ignoreAspectRatio = false, bool spherize = false)
